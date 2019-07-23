@@ -48,29 +48,52 @@ function readFileAsync(file) {
     reader.onload = () => {
       resolve(reader.result);
     };
-
     reader.onerror = reject;
-
     reader.readAsArrayBuffer(file);
   })
 }
 
 async function processFile(e) {
-  console.log(e.target.files)
-  // try {
-  //   let file = document.getElementById('fileInput').files[0];
-  //   let contentBuffer = await readFileAsync(file);
-  //   console.log(contentBuffer);
-  // } catch(err) {
-  //   console.log(err);
-  // }
+  try {
+    let file = e.target.files[0]; // document.getElementById('fileInput').files[0];
+    let contentBuffer = await readFileAsync(file);
+    console.log(contentBuffer);
+  } catch(err) {
+    console.log(err);
+  }
 }
 
 function Playlist(props) {
+  const [ files, setFiles ] = useState({});
+  useEffect(() => {
+    //console.log(files);
+    const loaded = Object.values(files);
+    loaded.forEach((file) => {
+      readFileAsync(file)
+        .then(data => {
+          file.arrayBuffer = data;
+          console.log(file)
+        })
+    })
+  },[files]);
+  
   return(
     <div>
       <h1>Playlist</h1>
-      <input type="file" multiple onChange={ processFile }></input>
+      <input 
+        type="file"
+        onChange= { (event) => setFiles(event.target.files) }
+        accept=".mp3,.m4a,.wav,.wma,.aiff"
+        multiple  
+      />
+      <ul>
+        {
+          Object.values(files)
+            .map((file, index) => 
+              <li key={ index }>{ file.name }</li>
+            )
+        }
+      </ul>
     </div>
   )
 }
