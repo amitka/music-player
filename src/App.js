@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import { Howl } from 'howler'; 
 import SoundFile from './assets/sound.mp3';
+// import FileReaderInput from 'react-file-reader-input';
+// import ReactFileReader from 'react-file-reader';
 
 // export default class App extends React.Component {
 //   state= {
@@ -37,6 +39,42 @@ import SoundFile from './assets/sound.mp3';
 //   }
 // }
 
+// react async file reader
+
+function readFileAsync(file) {
+  return new Promise((resolve, reject) => {
+    let reader = new FileReader();
+
+    reader.onload = () => {
+      resolve(reader.result);
+    };
+
+    reader.onerror = reject;
+
+    reader.readAsArrayBuffer(file);
+  })
+}
+
+async function processFile(e) {
+  console.log(e.target.files)
+  // try {
+  //   let file = document.getElementById('fileInput').files[0];
+  //   let contentBuffer = await readFileAsync(file);
+  //   console.log(contentBuffer);
+  // } catch(err) {
+  //   console.log(err);
+  // }
+}
+
+function Playlist(props) {
+  return(
+    <div>
+      <h1>Playlist</h1>
+      <input type="file" multiple onChange={ processFile }></input>
+    </div>
+  )
+}
+
 function Player(props) {
   const [ sound, setSound ] = useState(undefined);
   useEffect(() => {
@@ -65,6 +103,7 @@ export default function App() {
   return (
     <div className="App">
       <Player song={ SoundFile } />
+      <Playlist />
     </div>
   );
 }
