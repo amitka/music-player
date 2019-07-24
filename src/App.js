@@ -49,21 +49,70 @@ function readFileAsync(file) {
       resolve(reader.result);
     };
     reader.onerror = reject;
-    reader.readAsArrayBuffer(file);
+    reader.readAsDataURL(file);
   })
 }
 
-async function processFile(e) {
-  try {
-    let file = e.target.files[0]; // document.getElementById('fileInput').files[0];
-    let contentBuffer = await readFileAsync(file);
-    console.log(contentBuffer);
-  } catch(err) {
-    console.log(err);
-  }
-}
+// async function processFile(e) {
+//   try {
+//     let file = e.target.files[0]; // document.getElementById('fileInput').files[0];
+//     let contentBuffer = await readFileAsync(file);
+//     console.log(contentBuffer);
+//   } catch(err) {
+//     console.log(err);
+//   }
+// }
 
-function Playlist(props) {
+// function Playlist(props) {
+//   const [ files, setFiles ] = useState({});
+//   useEffect(() => {
+//     //console.log(files);
+//     const loaded = Object.values(files);
+//     loaded.forEach((file) => {
+//       readFileAsync(file)
+//         .then(data => {
+//           file.arrayBuffer = data;
+//           console.log(file)
+//         })
+//     })
+//   },[files]);
+  
+//   return(
+//     <div>
+//       <h1>Playlist</h1>
+//       <input 
+//         type="file"
+//         onChange= { (event) => setFiles(event.target.files) }
+//         accept=".mp3,.m4a,.wav,.wma,.aiff"
+//         multiple  
+//       />
+//       <ul>
+//         {
+//           Object.values(files)
+//             .map((file, index) => 
+//               <li key={ index }>{ file.name }</li>
+//             )
+//         }
+//       </ul>
+//     </div>
+//   )
+// }
+
+function Player() {
+  // const [ sound, setSound ] = useState(undefined);
+  // useEffect(() => {
+  //   const soundObj = new Howl({
+  //     src: []
+  //   });
+  //   setSound(soundObj)
+  // },[])
+  
+  // const [ play, setPlay ] = useState(false)
+  // useEffect(() => {
+  //   if (sound === undefined) return
+  //   play ? sound.play() : sound.stop()
+  // }, [play])
+
   const [ files, setFiles ] = useState({});
   useEffect(() => {
     //console.log(files);
@@ -71,52 +120,28 @@ function Playlist(props) {
     loaded.forEach((file) => {
       readFileAsync(file)
         .then(data => {
-          file.arrayBuffer = data;
+          file.dataUrl = data;
           console.log(file)
+          const sound = new Howl({
+            src: files[0].dataUrl
+          })
+          console.log(sound)
+          sound.play()
         })
     })
+    
   },[files]);
-  
+
   return(
-    <div>
-      <h1>Playlist</h1>
+    <div className="player">
+      {/* <button onClick={ () => setPlay(true) }>Play</button>
+      <button onClick={ () => setPlay(false) }>Stop</button> */}
       <input 
         type="file"
         onChange= { (event) => setFiles(event.target.files) }
         accept=".mp3,.m4a,.wav,.wma,.aiff"
         multiple  
       />
-      <ul>
-        {
-          Object.values(files)
-            .map((file, index) => 
-              <li key={ index }>{ file.name }</li>
-            )
-        }
-      </ul>
-    </div>
-  )
-}
-
-function Player(props) {
-  const [ sound, setSound ] = useState(undefined);
-  useEffect(() => {
-    const soundObj = new Howl({
-      src: props.song
-    });
-    setSound(soundObj)
-  },[])
-  
-  const [ play, setPlay ] = useState(false)
-  useEffect(() => {
-    if (sound === undefined) return
-    play ? sound.play() : sound.stop()
-  }, [play])
-
-  return(
-    <div className="player">
-      <button onClick={ () => setPlay(true) }>Play</button>
-      <button onClick={ () => setPlay(false) }>Stop</button>
     </div>
   )
 }
@@ -125,8 +150,7 @@ export default function App() {
 
   return (
     <div className="App">
-      <Player song={ SoundFile } />
-      <Playlist />
+      <Player />
     </div>
   );
 }
