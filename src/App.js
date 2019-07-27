@@ -8,6 +8,17 @@ import { statement } from '@babel/template';
 const useMusicPlayer = () => {
   const [state, setState] = useContext(MusicPlayerContext);
 
+  useEffect(
+    () => {
+      console.log('Converting to DataURL...');
+    }, [state.tracks]
+  )
+
+  function loadTracks(newTracks) {
+    const allTracks = [...state.tracks, ...newTracks];
+    setState(state=> ({...state, tracks: allTracks}));
+  }
+
   // Play a specific track
   function playTrack(index) {
     if (index === state.currentTrackIndex) {
@@ -23,6 +34,7 @@ const useMusicPlayer = () => {
   }
   
   return {
+    loadTracks,
     playTrack,
     togglePlay,
     tracksList: state.tracks
@@ -31,14 +43,13 @@ const useMusicPlayer = () => {
 
 
 const Playlist = () => {
-  const [state, setState] = useContext(MusicPlayerContext);
+  //const [state, setState] = useContext(MusicPlayerContext);
+  const {loadTracks, tracksList} = useMusicPlayer();
 
-  const handleFiles = (e) => {
+  const handleSelected = (e) => {
     //console.log(e.target.files)
-    const justLoaded = Object.values(e.target.files);
-    const allTracks = [...state.tracks, ...justLoaded];
-    //
-    setState(state=> ({...state, tracks: allTracks}))
+    const selected = Object.values(e.target.files);
+    loadTracks(selected);
   }
 
   return (
@@ -46,16 +57,16 @@ const Playlist = () => {
       <div className="toolbar-container">
         <input 
           type="file"
-          onChange= { handleFiles }
+          onChange= { handleSelected }
           accept=".mp3,.m4a,.wav,.wma,.aiff"
           multiple  
         />
-        <span>{ `${state.tracks.length} tracks` }</span>
+        <span>{ `${tracksList.length} tracks` }</span>
       </div>
       <div className="tracks-container">
         <ul>
           {
-            state.tracks.map((track, index)=>(
+            tracksList.map((track, index)=>(
               <li key={ index }>{ track.name }</li>
             ))
           }
