@@ -1,46 +1,8 @@
 import React, { useState, useEffect, useContext } from 'react';
 import './App.css';
 import { MusicPlayerProvider, MusicPlayerContext } from './MusicPlayerContext';
-import { statement } from '@babel/template';
+import useMusicPlayer from './hooks/useMusicPlayer';
 // import { Howl } from 'howler';   
-
-
-const useMusicPlayer = () => {
-  const [state, setState] = useContext(MusicPlayerContext);
-
-  useEffect(
-    () => {
-      console.log('Converting to DataURL...');
-    }, [state.tracks]
-  )
-
-  function loadTracks(newTracks) {
-    const allTracks = [...state.tracks, ...newTracks];
-    setState(state=> ({...state, tracks: allTracks}));
-  }
-
-  // Play a specific track
-  function playTrack(index) {
-    if (index === state.currentTrackIndex) {
-      togglePlay();
-    } else {
-      setState(state => ({ ...state, currentTrackIndex: index, isPlaying: true }));
-    }
-  }
-
-  // Toggle play or pause
-  function togglePlay() {
-    setState(state => ({...state, isPlaying: !state.isPlaying}));
-  }
-  
-  return {
-    loadTracks,
-    playTrack,
-    togglePlay,
-    tracksList: state.tracks
-  }
-}
-
 
 const Playlist = () => {
   //const [state, setState] = useContext(MusicPlayerContext);
