@@ -1,17 +1,49 @@
 import { useContext, useEffect } from 'react';
 import { MusicPlayerContext } from '../MusicPlayerContext';
 
-const useMusicPlayer = () => {
+export const useMusicPlayer = () => {
   const [state, setState] = useContext(MusicPlayerContext);
 
   useEffect(
     () => {
-      console.log('Converting to DataURL...');
-      
+      state.tracks.forEach((track) => {
+        if (!track.dataUrl){
+          readFileAsync(track)
+          .then(data => {
+            track.dataUrl = data;
+            refreshTracks();
+          })
+        }
+      });
     }, [state.tracks]
   )
+  
+  function readFileAsync(file) {
+    return new Promise((resolve, reject) => {
+      let reader = new FileReader();
+  
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+  
+      reader.onError = (e) => {
+        reject(e)
+      }
 
-  function loadTracks(newTracks) {
+      try {
+        reader.readAsDataURL(file);
+      }
+      catch(e) {
+        console.log(e)
+      }
+    })
+  }
+
+  function refreshTracks() {
+    setState(state => ({...state, tracks: state.tracks}));
+  }
+
+  function addTracks(newTracks) {
     const allTracks = [...state.tracks, ...newTracks];
     setState(state=> ({...state, tracks: allTracks}));
   }
@@ -31,11 +63,9 @@ const useMusicPlayer = () => {
   }
   
   return {
-    loadTracks,
+    addTracks,
     playTrack,
     togglePlay,
     tracksList: state.tracks
   }
 }
-
-export default useMusicPlayer;
