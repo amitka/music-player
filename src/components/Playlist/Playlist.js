@@ -6,7 +6,7 @@ export const Playlist = () => {
 
   useEffect(
     () => {
-       console.log('Playlist loaded...');
+       // console.log('Playlist loaded...');
     }, []
   );
   
@@ -33,7 +33,7 @@ export const Playlist = () => {
             tracksList.map((track, index)=>(
               <li 
                 key={ index }
-                style={ track.dataUrl ? {opacity: '1'} : {opacity: '.5'} }
+                style={ track.sound ? {opacity: '1'} : {opacity: '.5'} }
               >
                 { track.name }
               </li>

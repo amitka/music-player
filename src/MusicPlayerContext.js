@@ -6,7 +6,7 @@ const MusicPlayerProvider = (props) => {
   const [state, setState] = useState({
     audio: null,
     tracks: [],
-    currentTrackIndex: null,
+    currentTrackIndex: 0,
     isPlaying: false
   });
 

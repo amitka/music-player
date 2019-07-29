@@ -2,13 +2,13 @@ import React from 'react';
 import { useMusicPlayer } from '../../hooks/useMusicPlayer';
 
 export const Player = () => {
-  const {playTrack, togglePlay, tracksList} = useMusicPlayer();
+  const {playTrack, playTrackAt, togglePlay, tracksList, currentTrackIndex} = useMusicPlayer();
 
   return (
     <div className="player-container">
-      <button>Prev</button>
+      <button onClick={ () => playTrackAt(currentTrackIndex - 1)}>Prev</button>
       <button onClick={ playTrack }>Play</button>
-      <button>Next</button>
+      <button onClick={ () => playTrackAt(currentTrackIndex + 1)}>Next</button>
     </div>
   )
 }

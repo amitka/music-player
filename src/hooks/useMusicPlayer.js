@@ -1,8 +1,23 @@
 import { useContext, useEffect } from 'react';
 import { MusicPlayerContext } from '../MusicPlayerContext';
+import {Howl, Howler} from 'howler';
 
 export const useMusicPlayer = () => {
   const [state, setState] = useContext(MusicPlayerContext);
+
+  useEffect(
+    () => {
+      console.log(state)
+    }
+  )
+
+  useEffect(
+    () => {
+      if (state.tracks.length > 0) {
+        playTrack()
+      }
+    }, [state.currentTrackIndex]
+  )
 
   useEffect(
     () => {
@@ -10,7 +25,7 @@ export const useMusicPlayer = () => {
         if (!track.dataUrl){
           readFileAsync(track)
           .then(data => {
-            track.dataUrl = data;
+            track.sound = new Howl({ src: data });
             refreshTracks();
           })
         }
@@ -48,24 +63,43 @@ export const useMusicPlayer = () => {
     setState(state=> ({...state, tracks: allTracks}));
   }
 
-  // Play a specific track
-  function playTrack(index) {
-    if (index === state.currentTrackIndex) {
-      togglePlay();
-    } else {
-      setState(state => ({ ...state, currentTrackIndex: index, isPlaying: true }));
+  function playTrack() {
+    if (state.audio !== null) {
+      state.audio.stop();
     }
+
+    const currentAudio = state.tracks[state.currentTrackIndex].sound;
+    currentAudio.play();
+
+    setState(state => ({...state, audio: currentAudio}));
+  }
+
+  function playTrackAt(index) {
+    if (index < 0) {
+      index = state.tracks.length -1;
+    } 
+    else if ( index > state.tracks.length -1) {
+      index = 0;
+    }
+    setState(state => ({...state, currentTrackIndex: index}));
   }
 
   // Toggle play or pause
   function togglePlay() {
+    if (state.isPlaying) {
+      state.audio.pause();
+    } else {
+      state.audio.play();
+    }
     setState(state => ({...state, isPlaying: !state.isPlaying}));
   }
   
   return {
     addTracks,
     playTrack,
+    playTrackAt,
     togglePlay,
-    tracksList: state.tracks
+    tracksList: state.tracks,
+    currentTrackIndex: state.currentTrackIndex
   }
 }
