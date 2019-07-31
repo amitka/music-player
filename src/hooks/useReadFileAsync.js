@@ -1,20 +1,35 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
+import { MusicPlayerContext } from '../MusicPlayerContext';
+
+// FileReader.readAsArrayBuffer()
+// FileReader.readAsBinaryString()
+// FileReader.readAsDataURL()
+// FileReader.readAsText()
 
 export const useReadFileAsync = () => {
-  const [file, readFile] = useState(null);
+  const [state, setState] = useContext(MusicPlayerContext);
+  const [files, readFilesAsync] = useState(null);
   const [error, setError] = useState(null);
-  const [result, setResult] = useState(null);
+  const [done, setDone] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(
     () => {
-      console.log(file)
-      readFileAsync(file)
-      .then(data => {
-        file.sound = data;
-        setResult(file)
-      })
-    }, [file]
+      if (files !== null) {
+        files.forEach(file => {
+          const promise = readFileAsync(file)
+          promise
+            .then(result => {
+              file.sound = result;
+              const all = [ ...state.tracks, ...files] 
+              setState({...state, tracks: all})
+            })
+            .catch(error =>
+              console.log('useReadFileAsync error...' + error)
+            )
+        });
+      }
+    }, [files]
   )
 
   function readFileAsync(file) {
@@ -39,10 +54,10 @@ export const useReadFileAsync = () => {
   }
   
   return {
-    file,
-    readFile,
+    files,
+    readFilesAsync,
     error,
-    result,
+    done,
     loading
   }
 }

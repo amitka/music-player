@@ -5,22 +5,18 @@ import { Howl } from 'howler';
 
 export const useMusicPlayer = () => {
   const [state, setState] = useContext(MusicPlayerContext);
-  const {file, readFile, result} = useReadFileAsync()
+  const {readFilesAsync, done} = useReadFileAsync()
   
-
-  useEffect(
-    () => {
-      console.log(result)
-    }, [result]
-  )
-  
+  // useEffect(
+  //   () => {
+  //     console.log(state)
+  //   }, [state]
+  // )
   
   function addTracks(newTracks) {
-    newTracks.forEach(track => {
-      readFile(track)
-    });
-    const allTracks = [...state.tracks, ...newTracks];
-    setState(state=> ({...state, tracks: allTracks}));
+    //const allTracks = [...state.tracks, ...newTracks];
+    //setState(state=> ({...state, tracks: allTracks}));
+    readFilesAsync(newTracks);
   }
 
   function playTrackAt(index) {
