@@ -5,50 +5,69 @@ import { Howl } from 'howler';
 
 export const useMusicPlayer = () => {
   const [state, setState] = useContext(MusicPlayerContext);
-  const {readFilesAsync, done} = useReadFileAsync()
+  const {readFilesAsync, ready} = useReadFileAsync()
   
-  // useEffect(
-  //   () => {
-  //     console.log(state)
-  //   }, [state]
-  // )
+  useEffect(
+    () => {
+      if (ready) {
+        // LOAD FIRST TRACK WHEN READY
+        console.log('Ready to play...')
+        setState(state=>({
+          ...state,
+          audioPlayer: new Howl({ src: [state.tracks[0].sound]}),
+          currentTrackIndex: 0
+        }))
+      }
+    }, [ready]
+  )
   
   function addTracks(newTracks) {
-    //const allTracks = [...state.tracks, ...newTracks];
-    //setState(state=> ({...state, tracks: allTracks}));
     readFilesAsync(newTracks);
   }
 
-  function playTrackAt(index) {
+  function playTrack(index) {
     if (index === state.currentTrackIndex) {
       togglePlay();
+    } else {
+      state.audioPlayer.pause();
+      state.audioPlayer = new Howl({ src: [ state.tracks[index].sound ] })
+      state.audioPlayer.play();
+      setState(state => ({ ...state, currentTrackIndex: index, isPlaying: true }));
     }
-    else if (index < 0) {
-      index = state.tracks.length -1;
-    } 
-    else if (index > state.tracks.length -1) {
-      index = 0;
-    }
-
-    setState(state => ({...state, currentTrackIndex: index}));
   }
 
   // Toggle play or pause
   function togglePlay() {
     if (state.isPlaying) {
-      state.audio.pause();
+      state.audioPlayer.pause();
     } else {
-      state.audio.play();
+      state.audioPlayer.play();
     }
 
     setState(state => ({...state, isPlaying: !state.isPlaying}));
   }
   
+  // Play the previous track in the tracks array
+  function playPreviousTrack() {
+    const newIndex = ((state.currentTrackIndex + -1) % state.tracks.length + state.tracks.length) % state.tracks.length;
+    playTrack(newIndex);
+  }
+
+  // Play the next track in the tracks array
+  function playNextTrack() {
+    const newIndex = (state.currentTrackIndex + 1) % state.tracks.length;
+    console.log(newIndex)
+    playTrack(newIndex);
+  }
+
   return {
     addTracks,
-    playTrackAt,
+    playTrack,
     togglePlay,
+    playPreviousTrack,
+    playNextTrack,
     tracksList: state.tracks,
-    currentTrackIndex: state.currentTrackIndex
+    currentTrackIndex: state.currentTrackIndex,
+    isPlaying: state.isPlaying
   }
 }

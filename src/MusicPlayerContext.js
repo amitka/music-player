@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-// import {Howl, Howler} from 'howler';
+import { Howl } from 'howler';
 const MusicPlayerContext = React.createContext([{}, ()=>{}]);
 
 const MusicPlayerProvider = (props) => {
   const [state, setState] = useState({
-    audio: null,
+    audioPlayer: new Howl({ src: ['demo.mp3']}),
     tracks: [],
     currentTrackIndex: -1,
     isPlaying: false

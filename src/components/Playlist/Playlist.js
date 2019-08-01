@@ -1,8 +1,9 @@
 import React, { useEffect } from 'react';
 import { useMusicPlayer } from '../../hooks/useMusicPlayer';
+import classNames from 'classnames';
 
 export const Playlist = () => {
-  const {addTracks, tracksList} = useMusicPlayer();
+  const {addTracks, tracksList, currentTrackIndex} = useMusicPlayer();
 
   useEffect(
     () => {
@@ -34,6 +35,7 @@ export const Playlist = () => {
               <li 
                 key={ index }
                 style={ track.sound ? {opacity: '1'} : {opacity: '.5'} }
+                className={ classNames("track-item", {'selected': index === currentTrackIndex}) }
               >
                 { track.name }
               </li>
