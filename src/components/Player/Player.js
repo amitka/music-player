@@ -10,8 +10,6 @@ export const Player = () => {
     isPlaying
   } = useMusicPlayer();
 
-  
-
   return (
     <div className="player-container">
       <button onClick={() => playPreviousTrack() }>Prev</button>

@@ -21,6 +21,10 @@ export const useMusicPlayer = () => {
     }, [ready]
   )
   
+  function clearAllTracks() {
+    setState(state=> ({...state, tracks: []}))
+  }
+
   function addTracks(newTracks) {
     readFilesAsync(newTracks);
   }
@@ -56,11 +60,11 @@ export const useMusicPlayer = () => {
   // Play the next track in the tracks array
   function playNextTrack() {
     const newIndex = (state.currentTrackIndex + 1) % state.tracks.length;
-    console.log(newIndex)
     playTrack(newIndex);
   }
 
   return {
+    clearAllTracks,
     addTracks,
     playTrack,
     togglePlay,

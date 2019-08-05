@@ -9,9 +9,9 @@ import { MusicPlayerContext } from '../MusicPlayerContext';
 export const useReadFileAsync = () => {
   const [state, setState] = useContext(MusicPlayerContext);
   const [files, readFilesAsync] = useState(null);
-  const [error, setError] = useState(null);
+  //const [error, setError] = useState(null);
   const [ready, setReady] = useState(false);
-  const [loading, setLoading] = useState(false);
+  //const [loading, setLoading] = useState(false);
 
   useEffect(
     () => {
@@ -43,7 +43,7 @@ export const useReadFileAsync = () => {
   
   function updateTracks() {
     const all = [ ...state.tracks, ...files] 
-    setState({...state, tracks: all})
+    setState(state=> ({...state, tracks: all}))
   }
 
   function readFileAsync(file) {
@@ -70,8 +70,8 @@ export const useReadFileAsync = () => {
   return {
     files,
     readFilesAsync,
-    error,
+    //error,
     ready,
-    loading
+    //loading
   }
 }

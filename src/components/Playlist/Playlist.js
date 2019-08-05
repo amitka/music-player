@@ -3,7 +3,7 @@ import { useMusicPlayer } from '../../hooks/useMusicPlayer';
 import classNames from 'classnames';
 
 export const Playlist = () => {
-  const {addTracks, tracksList, currentTrackIndex} = useMusicPlayer();
+  const {clearAllTracks, addTracks, tracksList, currentTrackIndex} = useMusicPlayer();
 
   useEffect(
     () => {
@@ -26,6 +26,7 @@ export const Playlist = () => {
           accept=".mp3,.m4a,.wav,.wma,.aiff"
           multiple  
         />
+        <button onClick={ clearAllTracks }>Clear</button>
         <span>{ `${tracksList.length} tracks` }</span>
       </div>
       <div className="tracks-container">
