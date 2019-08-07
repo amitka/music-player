@@ -9,6 +9,12 @@ export const useMusicPlayer = () => {
   
   useEffect(
     () => {
+      console.log(state.tracks)
+    }
+  )
+
+  useEffect(
+    () => {
       if (ready) {
         // LOAD FIRST TRACK WHEN READY
         console.log('Ready to play...')
@@ -26,6 +32,15 @@ export const useMusicPlayer = () => {
   }
 
   function addTracks(newTracks) {
+    // const jsmediatags = window.jsmediatags
+    // jsmediatags.read(newTracks[0], {
+    //   onSuccess: function(tag) {
+    //     console.log(tag);
+    //   },
+    //   onError: function(error) {
+    //     console.log(error);
+    //   }
+    // });
     readFilesAsync(newTracks);
   }
 

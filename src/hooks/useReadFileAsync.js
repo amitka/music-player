@@ -1,6 +1,8 @@
 import { useState, useEffect, useContext } from 'react';
 import { MusicPlayerContext } from '../MusicPlayerContext';
 
+const jsmediatags = window.jsmediatags;
+
 // FileReader.readAsArrayBuffer()
 // FileReader.readAsBinaryString()
 // FileReader.readAsDataURL()
@@ -19,9 +21,10 @@ export const useReadFileAsync = () => {
         setReady(false)
         let promiseArray = []
         files.forEach(file => {
-          const promise = readFileAsync(file)
-          promiseArray = [...promiseArray, promise]
-          promise
+          // FILE READER
+          const filePromise = readFileAsync(file)
+          promiseArray = [...promiseArray, filePromise]
+          filePromise
             .then(result => {
               file.sound = result;
               updateTracks()
@@ -29,6 +32,20 @@ export const useReadFileAsync = () => {
             .catch(error =>
               console.log('useReadFileAsync error...' + error)
             )
+            // MEDIA TAGS READER 
+            const tagsPromise = readMediaTagsAsync(file)
+            tagsPromise
+              .then(result => {
+                //console.log(result)
+                const tags = result.tags
+                file.artist = tags.artist
+                file.album = tags.album
+                file.pic = tags.picture
+                file.title = tags.title
+                file.trackNo = tags.track
+                file.year = tags.year
+                updateTracks()
+              })
         });
 
         Promise
@@ -64,6 +81,19 @@ export const useReadFileAsync = () => {
       catch(e) {
         console.log(e)
       }
+    })
+  }
+
+  function readMediaTagsAsync(file) {
+    return new Promise((resolve, reject) => {
+      window.jsmediatags.read(file, {
+        onSuccess: function(tag) {
+          resolve(tag);
+        },
+        onError: function(error) {
+          reject(error);
+        }
+      });
     })
   }
   

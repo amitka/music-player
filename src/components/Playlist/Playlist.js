@@ -38,7 +38,10 @@ export const Playlist = () => {
                 style={ track.sound ? {opacity: '1'} : {opacity: '.5'} }
                 className={ classNames("track-item", {'selected': index === currentTrackIndex}) }
               >
-                { track.name }
+                <span>{ track.trackNo }</span>
+                <span>{ track.title || track.name }</span>
+                <span>{ track.artist }</span>
+                <span>{ track.album }</span>
               </li>
             ))
           }
