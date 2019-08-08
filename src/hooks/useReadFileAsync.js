@@ -1,13 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { MusicPlayerContext } from '../MusicPlayerContext';
 
-const jsmediatags = window.jsmediatags;
-
-// FileReader.readAsArrayBuffer()
-// FileReader.readAsBinaryString()
-// FileReader.readAsDataURL()
-// FileReader.readAsText()
-
 export const useReadFileAsync = () => {
   const [state, setState] = useContext(MusicPlayerContext);
   const [files, readFilesAsync] = useState(null);
@@ -32,20 +25,20 @@ export const useReadFileAsync = () => {
             .catch(error =>
               console.log('useReadFileAsync error...' + error)
             )
-            // MEDIA TAGS READER 
-            const tagsPromise = readMediaTagsAsync(file)
-            tagsPromise
-              .then(result => {
-                //console.log(result)
-                const tags = result.tags
-                file.artist = tags.artist
-                file.album = tags.album
-                file.pic = tags.picture
-                file.title = tags.title
-                file.trackNo = tags.track
-                file.year = tags.year
-                updateTracks()
-              })
+          // MEDIA TAGS READER 
+          const tagsPromise = readMediaTagsAsync(file)
+          tagsPromise
+            .then(result => {
+              //console.log(result)
+              const tags = result.tags
+              file.artist = tags.artist
+              file.album = tags.album
+              file.pic = tags.picture
+              file.title = tags.title
+              file.trackNo = tags.track
+              file.year = tags.year
+              updateTracks()
+            })
         });
 
         Promise
@@ -86,14 +79,19 @@ export const useReadFileAsync = () => {
 
   function readMediaTagsAsync(file) {
     return new Promise((resolve, reject) => {
-      window.jsmediatags.read(file, {
-        onSuccess: function(tag) {
-          resolve(tag);
-        },
-        onError: function(error) {
-          reject(error);
-        }
-      });
+      try {
+        window.jsmediatags.read(file, {
+          onSuccess: function(tag) {
+            resolve(tag);
+          },
+          onError: function(error) {
+            reject(error);
+          }
+        });
+      }
+      catch (e) {
+        console.log(e)
+      }
     })
   }
   

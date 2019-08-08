@@ -10,7 +10,7 @@ export const Playlist = () => {
        // console.log('Playlist loaded...');
     }, []
   );
-  
+
   const handleSelected = (e) => {
     //console.log(e.target.files)
     const selected = Object.values(e.target.files);

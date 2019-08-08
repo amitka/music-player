@@ -4,12 +4,12 @@ import { useReadFileAsync } from './useReadFileAsync';
 import { Howl } from 'howler';
 
 export const useMusicPlayer = () => {
-  const [state, setState] = useContext(MusicPlayerContext);
-  const {readFilesAsync, ready} = useReadFileAsync()
+  const [state, setState, resetToDefault] = useContext(MusicPlayerContext);
+  const {readFilesAsync, ready} = useReadFileAsync();
   
   useEffect(
     () => {
-      console.log(state.tracks)
+      console.log(state)
     }
   )
 
@@ -28,19 +28,14 @@ export const useMusicPlayer = () => {
   )
   
   function clearAllTracks() {
-    setState(state=> ({...state, tracks: []}))
+    if (state.isPlaying) {
+      state.audioPlayer.pause()
+      state.audioPlayer = null;
+    }
+    resetToDefault()
   }
 
   function addTracks(newTracks) {
-    // const jsmediatags = window.jsmediatags
-    // jsmediatags.read(newTracks[0], {
-    //   onSuccess: function(tag) {
-    //     console.log(tag);
-    //   },
-    //   onError: function(error) {
-    //     console.log(error);
-    //   }
-    // });
     readFilesAsync(newTracks);
   }
 
@@ -62,7 +57,6 @@ export const useMusicPlayer = () => {
     } else {
       state.audioPlayer.play();
     }
-
     setState(state => ({...state, isPlaying: !state.isPlaying}));
   }
   
