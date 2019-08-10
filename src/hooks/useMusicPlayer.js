@@ -15,8 +15,9 @@ export const useMusicPlayer = () => {
 
   useEffect(
     () => {
+      // LOAD FIRST TRACK WHEN ...
+      // ... ALL TRACKS DATA IS READY !
       if (ready) {
-        // LOAD FIRST TRACK WHEN READY
         console.log('Ready to play...')
         setState(state=>({
           ...state,
@@ -29,8 +30,7 @@ export const useMusicPlayer = () => {
   
   function clearAllTracks() {
     if (state.isPlaying) {
-      state.audioPlayer.pause()
-      state.audioPlayer = null;
+      state.audioPlayer.unload()
     }
     resetToDefault()
   }
@@ -43,10 +43,18 @@ export const useMusicPlayer = () => {
     if (index === state.currentTrackIndex) {
       togglePlay();
     } else {
-      state.audioPlayer.pause();
+      // STOP SOUND REMOVE FROM CACHE
+      state.audioPlayer.unload();
+      // NEW TRACK
       state.audioPlayer = new Howl({ src: [ state.tracks[index].sound ] })
       state.audioPlayer.play();
-      setState(state => ({ ...state, currentTrackIndex: index, isPlaying: true }));
+      state.audioPlayer.on('end', playNextTrack);
+      //
+      setState(state => ({ 
+        ...state,
+        currentTrackIndex: index,
+        isPlaying: true 
+      }));
     }
   }
 
