@@ -9,14 +9,24 @@ export const useMusicPlayer = () => {
   
   useEffect(
     () => {
-      console.log(state)
-    }
+      if (state.isPlaying) {
+        console.log('event added...')
+        state.audioPlayer.on('end', () => {
+          console.log('ended...')
+          playNextTrack()
+        })
+      }
+      return () => {
+        console.log('event removed...')
+        state.audioPlayer.off()
+      }
+    }, [state]
   )
 
   useEffect(
     () => {
       // LOAD FIRST TRACK WHEN ...
-      // ... ALL TRACKS DATA IS READY !
+      // ... ALL TRACKS ARE READY !
       if (ready) {
         console.log('Ready to play...')
         setState(state=>({
@@ -36,6 +46,7 @@ export const useMusicPlayer = () => {
   }
 
   function addTracks(newTracks) {
+    console.log('add ...')
     readFilesAsync(newTracks);
   }
 
@@ -48,7 +59,6 @@ export const useMusicPlayer = () => {
       // NEW TRACK
       state.audioPlayer = new Howl({ src: [ state.tracks[index].sound ] })
       state.audioPlayer.play();
-      state.audioPlayer.on('end', playNextTrack);
       //
       setState(state => ({ 
         ...state,

@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { useMusicPlayer } from '../../hooks/useMusicPlayer';
 import classNames from 'classnames';
 
 export const Playlist = () => {
   const {clearAllTracks, addTracks, tracksList, currentTrackIndex} = useMusicPlayer();
+  const fileInput = useRef();
 
   useEffect(
     () => {
@@ -20,7 +21,8 @@ export const Playlist = () => {
   return (
     <div className="playlist-container">
       <div className="toolbar-container">
-        <input 
+        <input
+          ref={ fileInput } 
           type="file"
           onChange= { handleSelected }
           accept=".mp3,.m4a,.wav,.wma,.aiff"
