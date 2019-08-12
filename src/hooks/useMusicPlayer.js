@@ -12,7 +12,7 @@ export const useMusicPlayer = () => {
       // LOAD FIRST TRACK WHEN ...
       // ... ALL TRACKS ARE READY !
       if (ready) {
-        console.log('Ready to play...')
+        console.log('Ready to play !')
         setState(state=>({
           ...state,
           audioPlayer: new Howl({ src: [state.tracks[0].sound]}),
@@ -35,28 +35,31 @@ export const useMusicPlayer = () => {
 
   function clearAllTracks() {
     if (state.isPlaying) {
+      // STOP ALL SOUNDS - REMOVE FROM CACHE
       state.audioPlayer.unload()
     }
     resetToDefault()
   }
 
   function addTracks(newTracks) {
-    console.log('add ...')
     readFilesAsync(newTracks);
   }
 
   function selectTrack(index) {
-    setState(state => ({...state, currentTrackIndex:index}));
+    // STOP 
+    state.audioPlayer.stop();
+    // NEW TRACK
+    state.audioPlayer = new Howl({src: [ state.tracks[index].sound ]})
+    //
+    state.isPlaying 
+    ? playTrack(index)
+    : setState(state => ({...state, currentTrackIndex:index})); 
   }
 
   function playTrack(index) {
     if (index === state.currentTrackIndex) {
       togglePlay();
     } else {
-      // STOP SOUND REMOVE FROM CACHE
-      state.audioPlayer.unload();
-      // NEW TRACK
-      state.audioPlayer = new Howl({src: [ state.tracks[index].sound ]})
       state.audioPlayer.play();
       //
       setState(state => ({ 
@@ -80,13 +83,13 @@ export const useMusicPlayer = () => {
   // Play the previous track in the tracks array
   function playPreviousTrack() {
     const newIndex = ((state.currentTrackIndex + -1) % state.tracks.length + state.tracks.length) % state.tracks.length;
-    playTrack(newIndex);
+    selectTrack(newIndex);
   }
 
   // Play the next track in the tracks array
   function playNextTrack() {
     const newIndex = (state.currentTrackIndex + 1) % state.tracks.length;
-    playTrack(newIndex);
+    selectTrack(newIndex);
   }
 
   return {

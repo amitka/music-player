@@ -44,7 +44,6 @@ export const useReadFileAsync = () => {
         Promise
           .all(promiseArray)
           .then(result => {
-            console.log(result.length)
             setReady(true)
           })
       }
