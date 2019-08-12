@@ -3,7 +3,14 @@ import { useMusicPlayer } from '../../hooks/useMusicPlayer';
 import classNames from 'classnames';
 
 export const Playlist = () => {
-  const {clearAllTracks, addTracks, tracksList, currentTrackIndex} = useMusicPlayer();
+  const {
+    clearAllTracks,
+    selectTrack,
+    addTracks,
+    tracksList,
+    currentTrackIndex
+  } = useMusicPlayer();
+  
   const fileInput = useRef();
 
   useEffect(
@@ -11,11 +18,17 @@ export const Playlist = () => {
        // console.log('Playlist loaded...');
     }, []
   );
+  
+  const onTrackSelected = (index) => {
+    //console.log(index)
+    selectTrack(index);
+  }
 
-  const handleSelected = (e) => {
-    //console.log(e.target.files)
+  const handleUserSelect = (e) => {
     const selected = Object.values(e.target.files);
     addTracks(selected);
+    // RESET FILE INPUT - ALLOW TO LOAD THE SAME FILES OVER
+    fileInput.current.value = "";
   }
 
   return (
@@ -24,7 +37,7 @@ export const Playlist = () => {
         <input
           ref={ fileInput } 
           type="file"
-          onChange= { handleSelected }
+          onChange= { handleUserSelect }
           accept=".mp3,.m4a,.wav,.wma,.aiff"
           multiple  
         />
@@ -39,6 +52,7 @@ export const Playlist = () => {
                 key={ index }
                 style={ track.sound ? {opacity: '1'} : {opacity: '.5'} }
                 className={ classNames("track-item", {'selected': index === currentTrackIndex}) }
+                onClick={ () => onTrackSelected(index) }
               >
                 <span>{ track.trackNo }</span>
                 <span>{ track.title || track.name }</span>

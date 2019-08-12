@@ -9,22 +9,6 @@ export const useMusicPlayer = () => {
   
   useEffect(
     () => {
-      if (state.isPlaying) {
-        console.log('event added...')
-        state.audioPlayer.on('end', () => {
-          console.log('ended...')
-          playNextTrack()
-        })
-      }
-      return () => {
-        console.log('event removed...')
-        state.audioPlayer.off()
-      }
-    }, [state]
-  )
-
-  useEffect(
-    () => {
       // LOAD FIRST TRACK WHEN ...
       // ... ALL TRACKS ARE READY !
       if (ready) {
@@ -38,6 +22,17 @@ export const useMusicPlayer = () => {
     }, [ready]
   )
   
+  useEffect(
+    () => {
+      if (state.isPlaying) {
+        state.audioPlayer.on('end', playNextTrack)
+      }
+      return () => {
+        state.audioPlayer.off()
+      }
+    }
+  )
+
   function clearAllTracks() {
     if (state.isPlaying) {
       state.audioPlayer.unload()
@@ -50,6 +45,10 @@ export const useMusicPlayer = () => {
     readFilesAsync(newTracks);
   }
 
+  function selectTrack(index) {
+    setState(state => ({...state, currentTrackIndex:index}));
+  }
+
   function playTrack(index) {
     if (index === state.currentTrackIndex) {
       togglePlay();
@@ -57,7 +56,7 @@ export const useMusicPlayer = () => {
       // STOP SOUND REMOVE FROM CACHE
       state.audioPlayer.unload();
       // NEW TRACK
-      state.audioPlayer = new Howl({ src: [ state.tracks[index].sound ] })
+      state.audioPlayer = new Howl({src: [ state.tracks[index].sound ]})
       state.audioPlayer.play();
       //
       setState(state => ({ 
@@ -94,6 +93,7 @@ export const useMusicPlayer = () => {
     clearAllTracks,
     addTracks,
     playTrack,
+    selectTrack,
     togglePlay,
     playPreviousTrack,
     playNextTrack,

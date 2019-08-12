@@ -6,9 +6,15 @@
     margin: 0;
 
     .track-item{
+      padding: 6px 10px;
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    
+      
+      &:not(.selected):hover{
+        background-color: lightgrey;
+        cursor: pointer;
+      }
+      
       &.selected{
         background-color: lightblue;  
       }
