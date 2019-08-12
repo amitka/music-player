@@ -20,7 +20,6 @@ export const Playlist = () => {
   );
   
   const onTrackSelected = (index) => {
-    //console.log(index)
     selectTrack(index);
   }
 
@@ -54,7 +53,7 @@ export const Playlist = () => {
                 className={ classNames("track-item", {'selected': index === currentTrackIndex}) }
                 onClick={ () => onTrackSelected(index) }
               >
-                <span>{ track.trackNo }</span>
+                <span>{ index + 1 }</span>
                 <span>{ track.title || track.name }</span>
                 <span>{ track.artist }</span>
                 <span>{ track.album }</span>

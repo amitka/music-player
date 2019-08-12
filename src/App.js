@@ -8,10 +8,10 @@ import './App.css';
 const App = () => {
   return (
     <MusicPlayerProvider>
-      <div className="App">
+      <main className="app-container dark-theme">
         <Player />
         <Playlist />
-      </div>
+      </main>
     </MusicPlayerProvider>
   );
 }

@@ -46,7 +46,7 @@ export const useMusicPlayer = () => {
   }
 
   function selectTrack(index) {
-    // STOP 
+    // STOP PLAYING
     state.audioPlayer.stop();
     // NEW TRACK
     state.audioPlayer = new Howl({src: [ state.tracks[index].sound ]})
