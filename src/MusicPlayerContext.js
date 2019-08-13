@@ -8,7 +8,8 @@ const DEFAULT_STATE = {
   audioPlayer: new Howl({ src: [null]}),
   tracks: [],
   currentTrackIndex: 0,
-  isPlaying: false
+  isPlaying: false,
+  uiTheme: 'dark-theme'
 }
 
 const MusicPlayerProvider = (props) => {
@@ -36,4 +37,10 @@ const MusicPlayerProvider = (props) => {
   )
 }
 
-export { MusicPlayerContext, MusicPlayerProvider };
+const MusicPlayerConsumer = MusicPlayerContext.Consumer;
+
+export { 
+  MusicPlayerContext,
+  MusicPlayerProvider,
+  MusicPlayerConsumer 
+}
