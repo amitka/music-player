@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Howl } from 'howler';
-import { ExampleTrack } from './components/ExampleTrack';
+import { ExampleTrack } from '../components/ExampleTrack';
 
 const MusicPlayerContext = React.createContext([{}, ()=>{}, ()=>{}]);
 

@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { MusicPlayerContext } from '../MusicPlayerContext';
+import { MusicPlayerContext } from '../context/MusicPlayerContext';
 
 export const useReadFileAsync = () => {
   const [state, setState] = useContext(MusicPlayerContext);

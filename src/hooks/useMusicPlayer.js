@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react';
-import { MusicPlayerContext } from '../MusicPlayerContext';
+import { MusicPlayerContext } from '../context/MusicPlayerContext';
 import { useReadFileAsync } from './useReadFileAsync';
 import { Howl } from 'howler';
 

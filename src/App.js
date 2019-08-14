@@ -1,24 +1,13 @@
-import React, { useEffect, useContext } from 'react';
-import { MusicPlayerProvider, MusicPlayerConsumer } from './MusicPlayerContext';
-import { Playlist } from './components/Playlist';
-import { Player } from './components/Player';
+import React from 'react';
+import { MusicPlayerProvider } from './context/MusicPlayerContext';
+import { MusicPlayer } from './containers/MusicPlayer';
 
-import './App.css';  
+//import './App.css';  
 
 const App = () => {
-
   return (
     <MusicPlayerProvider>
-      <MusicPlayerConsumer>
-        {
-          ([state]) => 
-            <main className="app-container dark-theme">
-              <div>{ state.uiTheme }</div>
-              <Player />
-              <Playlist />
-            </main>
-        }
-      </MusicPlayerConsumer>
+      <MusicPlayer />
     </MusicPlayerProvider>  
   );
 }
