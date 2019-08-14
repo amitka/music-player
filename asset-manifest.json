@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/music-player/static/css/main.5ba189cb.chunk.css",
+    "main.js": "/music-player/static/js/main.8574232e.chunk.js",
+    "main.js.map": "/music-player/static/js/main.8574232e.chunk.js.map",
+    "runtime~main.js": "/music-player/static/js/runtime~main.fdd2de90.js",
+    "runtime~main.js.map": "/music-player/static/js/runtime~main.fdd2de90.js.map",
+    "static/js/2.06bbe241.chunk.js": "/music-player/static/js/2.06bbe241.chunk.js",
+    "static/js/2.06bbe241.chunk.js.map": "/music-player/static/js/2.06bbe241.chunk.js.map",
+    "index.html": "/music-player/index.html",
+    "precache-manifest.d9351139b95b0294825ebd463a390e79.js": "/music-player/precache-manifest.d9351139b95b0294825ebd463a390e79.js",
+    "service-worker.js": "/music-player/service-worker.js",
+    "static/css/main.5ba189cb.chunk.css.map": "/music-player/static/css/main.5ba189cb.chunk.css.map",
+    "static/media/Give It Away.mp3": "/music-player/static/media/Give It Away.5e65dfca.mp3"
+  }
+}
