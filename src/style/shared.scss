@@ -1,8 +1,28 @@
 //
-.dark-theme{
+$font-size-100: 1.8rem;
+$font-size-200: 1rem;
+$font-size-300: 0.75rem;
+//
+$global-spacing-gap: 1rem;
+
+@mixin lbl-text-style {
+  color: var(--color-font-400);
+  font-size: $font-size-300;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.dark-theme {
   --color-primary-100: #000;
   --color-primary-200: #111;
   --color-primary-400: #444;
   //
   --color-secondary-100: #fff;
+  //
+  --color-border-100: #2f2f2f;
+  //
+  --color-font-700: #fff;
+  --color-font-400: #666;
+  //
+  --color-hover-200: #2b2b2b;
 }
