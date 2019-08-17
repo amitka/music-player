@@ -20,8 +20,8 @@ export const FastForward = (
     className="svg-icon"
   >
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M15 9.402V.742L34.5 12 15 23.258v-8.66l-15 8.66V.742l15 8.66z"
       fill="#fff"
     />
@@ -37,8 +37,8 @@ export const FastRewind = (
     className="svg-icon"
   >
     <path
-      fill-rule="evenodd"
-      clip-rule="evenodd"
+      fillRule="evenodd"
+      clipRule="evenodd"
       d="M20 14.598v8.66L.5 12 20 .742v8.66l15-8.66v22.516l-15-8.66z"
     />
   </svg>
