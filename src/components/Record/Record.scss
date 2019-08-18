@@ -1,39 +1,74 @@
-
 .record-container {
-  width: 90vh;
-  height: 90vh;
+  width: 95vh;
+  height: 95vh;
   position: relative;
-  
+
+  .track-duration-bar {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    z-index: 9999;
+  }
+
   .record-base {
     width: 100%;
     height: 100%;
+    background: url("../../assets/circPat.png") center center no-repeat;
+    background-size: cover;
+    background-blend-mode: color-dodge;
     background-color: var(--color-primary-200);
     border: 1px solid var(--color-primary-400);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    overflow: hidden;
+    animation: spin 60s linear infinite;
+
+    &.pause-spin {
+      animation-play-state: paused;
+    }
 
     .record-lbl {
       width: 50%;
       height: 50%;
       background-color: var(--color-secondary-100);
+      border: 1px solid var(--color-primary-400);
       border-radius: 50%;
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+      }
     }
   }
 
-  .record-pin{
+  .record-pin {
     width: 24px;
     height: 24px;
-    background: radial-gradient(16.41px at 14.64% 85.36%, #000000 0%, #FFFFFF 114.58%, #FFFFFF 145.8%, #000000 100%);
+    background: radial-gradient(
+      16.41px at 14.64% 85.36%,
+      #000000 0%,
+      #ffffff 114.58%,
+      #ffffff 145.8%,
+      #000000 100%
+    );
     border: 1px solid #000000;
     border-radius: 50%;
     position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    //z-index: 2;
+    z-index: 999;
   }
 }
 
-
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}

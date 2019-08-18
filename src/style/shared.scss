@@ -26,3 +26,10 @@ $global-spacing-gap: 1rem;
   //
   --color-hover-200: #2b2b2b;
 }
+
+.unselectable {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}

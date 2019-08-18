@@ -29,7 +29,7 @@ export const Player = () => {
         <label className="btn-lbl">Prev</label>
         <div
           className={className("btn-box", { "is-clicked": prevClick })}
-          onClick={() => playNextTrack()}
+          onClick={() => playPreviousTrack()}
           onMouseDown={() => setPrevClick(true)}
           onMouseUp={() => setPrevClick(false)}
         >
@@ -42,7 +42,7 @@ export const Player = () => {
           className={className("btn-box wide", { "is-playing": isPlaying })}
           onClick={() => playTrack(currentTrackIndex)}
         >
-          <span>{Icons.Play}</span>
+          <span>{isPlaying ? Icons.Pause : Icons.Play}</span>
         </div>
       </div>
       <div className="btn-wrapper">
