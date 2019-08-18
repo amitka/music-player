@@ -25,7 +25,7 @@ export const useReadFileAsync = () => {
         // MEDIA TAGS READER
         const tagsPromise = readMediaTagsAsync(file);
         tagsPromise.then(result => {
-          //console.log(result)
+          //console.log(result);
           const tags = result.tags;
           file.artist = tags.artist;
           file.album = tags.album;

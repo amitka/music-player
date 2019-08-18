@@ -9,7 +9,14 @@
     position: absolute;
     top: 0px;
     left: 0px;
+    transform: rotate(-90deg);
     z-index: 9999;
+
+    .path {
+      stroke-dasharray: 2000;
+      stroke-dashoffset: -1200;
+      animation: dash 5s linear forwards infinite;
+    }
   }
 
   .record-base {
@@ -70,5 +77,14 @@
 @keyframes spin {
   100% {
     transform: rotate(360deg);
+  }
+}
+
+@keyframes dash {
+  from {
+    stroke-dashoffset: 2000;
+  }
+  to {
+    stroke-dashoffset: 0;
   }
 }

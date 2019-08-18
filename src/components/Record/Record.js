@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useMusicPlayer } from "../../hooks/useMusicPlayer";
 import { base64ArrayBuffer } from "../../helpers/base64ArrayBuffer";
 import className from "classnames";
@@ -6,6 +6,7 @@ import className from "classnames";
 export const Record = () => {
   const { tracksList, currentTrackIndex, isPlaying } = useMusicPlayer();
   const [albumImage, setAlbumImage] = useState("");
+  const durationPath = useRef();
 
   useEffect(() => {
     // TODO: BETTER CODE
@@ -25,19 +26,29 @@ export const Record = () => {
         // LOAD DEFAULT IMAGE
         setAlbumImage("");
       }
+    } else {
+      setAlbumImage("");
     }
   }, [tracksList, currentTrackIndex]);
+
+  useEffect(() => {
+    const length = durationPath.current.getTotalLength();
+    console.log(length);
+  });
 
   return (
     <div className="record-container">
       <svg viewBox="0 0 100px 100px" className="track-duration-bar">
         <circle
+          className="path"
+          ref={durationPath}
           cx="50%"
           cy="50%"
           r="50%"
           stroke="#fff"
           strokeWidth="2px"
           fill="none"
+          style={{ animationDuration: "100s" }}
         />
       </svg>
       <div className={className("record-base", { "pause-spin": !isPlaying })}>
