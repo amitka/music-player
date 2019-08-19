@@ -7,7 +7,7 @@ const MusicPlayerContext = React.createContext([{}, () => {}, () => {}]);
 const DEFAULT_STATE = {
   audioPlayer: new Howl({ src: [null] }),
   tracks: [],
-  currentTrackIndex: 0,
+  currentTrackIndex: -1,
   isPlaying: false,
   uiTheme: "dark-theme"
 };
@@ -19,7 +19,8 @@ const MusicPlayerProvider = props => {
     setState(state => ({
       ...state,
       audioPlayer: new Howl({ src: [ExampleTrack.sound] }),
-      tracks: [ExampleTrack]
+      tracks: [ExampleTrack],
+      currentTrackIndex: 0
     }));
   }, []);
 

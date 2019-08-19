@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { MusicPlayerContext } from "../context/MusicPlayerContext";
+import { Howl } from "howler";
 
 export const useReadFileAsync = () => {
   const [state, setState] = useContext(MusicPlayerContext);
@@ -20,10 +21,19 @@ export const useReadFileAsync = () => {
           .then(result => {
             file.sound = result;
             updateTracks();
+            return result;
+          })
+          .then(result => {
+            const durationPromise = getAudioDuration(result);
+            durationPromise.then(result => {
+              file.duration = result;
+              updateTracks();
+            });
           })
           .catch(error => console.log("useReadFileAsync error..." + error));
         // MEDIA TAGS READER
         const tagsPromise = readMediaTagsAsync(file);
+        promiseArray = [...promiseArray, tagsPromise];
         tagsPromise.then(result => {
           //console.log(result);
           const tags = result.tags;
@@ -37,7 +47,7 @@ export const useReadFileAsync = () => {
         });
       });
 
-      Promise.all(promiseArray).then(result => {
+      Promise.all(promiseArray).then(() => {
         setReady(true);
       });
     }
@@ -78,6 +88,22 @@ export const useReadFileAsync = () => {
           onError: function(error) {
             reject(error);
           }
+        });
+      } catch (e) {
+        console.log(e);
+      }
+    });
+  }
+
+  function getAudioDuration(audioFile) {
+    return new Promise((resolve, reject) => {
+      try {
+        const sound = new Howl({ src: [audioFile] });
+        sound.on("load", () => {
+          resolve(sound.duration());
+        });
+        sound.on("loaderror", () => {
+          reject("getAudioDuration error");
         });
       } catch (e) {
         console.log(e);

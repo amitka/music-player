@@ -7,5 +7,6 @@ export const ExampleTrack = {
   pic: require("../../assets/example.jpg"),
   title: "Give It Away",
   trackNo: "1",
-  year: "1989"
+  year: "1989",
+  duration: 284.91755102040815
 };

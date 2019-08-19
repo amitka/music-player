@@ -3,19 +3,19 @@
   height: 95vh;
   position: relative;
 
-  .track-duration-bar {
+  .track-duration-progress-bar {
     width: 100%;
     height: 100%;
     position: absolute;
     top: 0px;
     left: 0px;
     transform: rotate(-90deg);
-    z-index: 9999;
+    z-index: 2;
 
-    .path {
-      stroke-dasharray: 2000;
-      stroke-dashoffset: -1200;
-      animation: dash 5s linear forwards infinite;
+    .progress-path {
+      &.pause-dash {
+        animation-play-state: paused !important;
+      }
     }
   }
 
@@ -81,10 +81,7 @@
 }
 
 @keyframes dash {
-  from {
-    stroke-dashoffset: 2000;
-  }
-  to {
+  100% {
     stroke-dashoffset: 0;
   }
 }
