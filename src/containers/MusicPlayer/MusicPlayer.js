@@ -16,8 +16,9 @@ export const MusicPlayer = () => {
       )}
     >
       <Record />
-      <Player />
+
       <Playlist />
+      <Player />
     </main>
   );
 };

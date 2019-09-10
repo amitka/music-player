@@ -5,18 +5,18 @@ import { Howl } from "howler";
 
 export const useMusicPlayer = () => {
   const [state, setState, resetToDefault] = useContext(MusicPlayerContext);
-  const { readFilesAsync, ready } = useReadFileAsync();
+  const { ready } = useReadFileAsync();
 
   useEffect(() => {
     // LOAD FIRST TRACK WHEN ...
     // ... ALL TRACKS ARE READY !
     if (ready) {
-      console.log("Ready to play !");
       setState(state => ({
         ...state,
         audioPlayer: new Howl({ src: [state.tracks[0].sound] }),
         currentTrackIndex: 0
       }));
+      console.log("Ready to play !");
     }
   }, [ready]);
 
@@ -35,10 +35,6 @@ export const useMusicPlayer = () => {
       state.audioPlayer.unload();
     }
     resetToDefault();
-  }
-
-  function addTracks(newTracks) {
-    readFilesAsync(newTracks);
   }
 
   function selectTrack(index) {
@@ -93,7 +89,6 @@ export const useMusicPlayer = () => {
 
   return {
     clearAllTracks,
-    addTracks,
     playTrack,
     selectTrack,
     togglePlay,

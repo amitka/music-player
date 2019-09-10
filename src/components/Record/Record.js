@@ -6,85 +6,59 @@ import className from "classnames";
 export const Record = () => {
   const { tracksList, currentTrackIndex, isPlaying } = useMusicPlayer();
   const [albumImage, setAlbumImage] = useState("");
-  const [progressStyle, setProgressStyle] = useState({});
-  const durationPath = useRef();
-
-  useEffect(() => {});
+  const [progressStyle, setProgressStyle] = useState({
+    animation: {},
+    restart: false
+  });
+  const [progressLength, setProgressLength] = useState(undefined);
+  const progressPath = useRef();
 
   useEffect(() => {
     // ON INIT LOAD SET PATH PARAMS
-    resetProgressPath();
-  }, []);
-
-  // useEffect(() => {
-  //   // TODO: BETTER CODE
-  //   // NO TRACKS NO IMAGE
-  //   if (tracksList.length === 0) {
-  //     setAlbumImage("");
-  //   }
-  //   // LOADING ALBUM IMAGE
-  //   if (tracksList[currentTrackIndex] && tracksList[currentTrackIndex].pic) {
-  //     const picSrc = tracksList[currentTrackIndex].pic;
-  //     if (typeof picSrc === "string") {
-  //       setAlbumImage(picSrc);
-  //     } else if (picSrc.data !== undefined) {
-  //       const b64 = base64ArrayBuffer(picSrc.data);
-  //       setAlbumImage(`data:${picSrc.format};base64, ${b64}`);
-  //     } else {
-  //       // LOAD DEFAULT IMAGE
-  //       setAlbumImage("");
-  //     }
-  //   } else {
-  //     setAlbumImage("");
-  //   }
-  // }, [tracksList, currentTrackIndex]);
+    setProgressLength(progressPath.current.getTotalLength());
+  });
 
   useEffect(() => {
-    console.log("currentTrackIndex = " + currentTrackIndex);
-    if (tracksList[currentTrackIndex]) {
-      if (durationPath.current.style.animationName) {
-        console.log(durationPath.current.style.animationName);
-      }
-      animateProgressPath();
+    // RESTART PROGRESS
+    if (currentTrackIndex > -1) {
+      setProgressStyle({ restart: true });
+    }
+    // RESET PROGRESS
+    if (currentTrackIndex === -1) {
+      setProgressStyle({ animation: {}, restart: false });
     }
   }, [currentTrackIndex]);
 
-  const animateProgressPath = () => {
-    console.log("new animation...");
-    const animation = {
-      animationName: "dash",
-      animationDuration: `${tracksList[currentTrackIndex].duration}s`,
-      animationTimingFunction: "linear",
-      animationFillMode: "forwards"
-    };
-    setProgressStyle(progressStyle => ({ ...progressStyle, ...animation }));
-  };
-
-  const resetProgressPath = () => {
-    const pathLength = durationPath.current.getTotalLength();
-    setProgressStyle({
-      strokeDasharray: pathLength,
-      strokeDashoffset: pathLength
-    });
-  };
+  useEffect(() => {
+    if (progressStyle.restart) {
+      const duration = tracksList[currentTrackIndex].duration;
+      const animate = { animation: `dash ${duration}s linear forwards` };
+      setProgressStyle({
+        animation: animate,
+        restart: false
+      });
+      console.log(animate);
+    }
+  }, [progressStyle]);
 
   return (
     <div className="record-container">
       <svg className="track-duration-progress-bar">
         <circle
           className={className("progress-path", { "pause-dash": !isPlaying })}
-          onAnimationEnd={() => {
-            console.log("animation end...");
-            resetProgressPath();
-          }}
-          ref={durationPath}
+          ref={progressPath}
           cx="50%"
           cy="50%"
           r="50%"
+          fill="none"
           stroke="#fff"
           strokeWidth="4px"
-          fill="none"
-          style={progressStyle}
+          strokeDasharray={progressLength}
+          strokeDashoffset={progressLength}
+          style={progressStyle.animation}
+          onAnimationEnd={() =>
+            setProgressStyle({ animation: {}, restart: false })
+          }
         />
       </svg>
       <div className={className("record-base", { "pause-spin": !isPlaying })}>

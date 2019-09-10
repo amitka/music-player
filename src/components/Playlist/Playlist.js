@@ -1,5 +1,6 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { useMusicPlayer } from "../../hooks/useMusicPlayer";
+import { useReadFileAsync } from "../../hooks/useReadFileAsync";
 import classNames from "classnames";
 
 export const Playlist = () => {
@@ -10,8 +11,12 @@ export const Playlist = () => {
     tracksList,
     currentTrackIndex
   } = useMusicPlayer();
-
+  const { addFiles } = useReadFileAsync();
   const fileInput = useRef();
+
+  useEffect(() => {
+    console.log("playlist = " + currentTrackIndex);
+  });
 
   const onTrackSelected = index => {
     selectTrack(index);
@@ -19,7 +24,7 @@ export const Playlist = () => {
 
   const handleUserSelect = e => {
     const selected = Object.values(e.target.files);
-    addTracks(selected);
+    addFiles(selected);
     // RESET FILE INPUT - ALLOW TO LOAD THE SAME FILES OVER
     fileInput.current.value = "";
   };

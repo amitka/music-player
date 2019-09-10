@@ -6,30 +6,30 @@
   position: absolute;
   top: 50px;
   right: 50px;
+
+  z-index: 99999999;
 }
 
-.tracks-container{
+.tracks-container {
   padding: 20px;
 
-  ul{
+  ul {
     padding: 0;
     margin: 0;
 
-    .track-item{
+    .track-item {
       padding: 6px 10px;
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      
-      &:not(.selected):hover{
+
+      &:not(.selected):hover {
         background-color: lightgrey;
         cursor: pointer;
       }
-      
-      &.selected{
-        background-color: lightblue;  
+
+      &.selected {
+        background-color: lightblue;
       }
     }
   }
 }
-
-

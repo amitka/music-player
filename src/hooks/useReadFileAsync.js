@@ -1,18 +1,27 @@
 import { useState, useEffect, useContext } from "react";
 import { MusicPlayerContext } from "../context/MusicPlayerContext";
-import { Howl } from "howler";
+import { Howl, Howler } from "howler";
 
 export const useReadFileAsync = () => {
   const [state, setState] = useContext(MusicPlayerContext);
-  const [files, readFilesAsync] = useState(null);
+  const [files, setFiles] = useState(null);
   //const [error, setError] = useState(null);
   const [ready, setReady] = useState(false);
   //const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (files !== null) {
+    if (state.tracks.length === 0) {
+      setFiles(null);
       setReady(false);
+    } else {
+      setReady(true);
+    }
+  }, [state.tracks]);
+
+  useEffect(() => {
+    if (files !== null) {
       let promiseArray = [];
+
       files.forEach(file => {
         // FILE READER
         const filePromise = readFileAsync(file);
@@ -20,22 +29,21 @@ export const useReadFileAsync = () => {
         filePromise
           .then(result => {
             file.sound = result;
-            updateTracks();
-            return result;
+            return file.sound;
           })
           .then(result => {
             const durationPromise = getAudioDuration(result);
+            promiseArray = [...promiseArray, durationPromise];
             durationPromise.then(result => {
               file.duration = result;
-              updateTracks();
             });
           })
           .catch(error => console.log("useReadFileAsync error..." + error));
+
         // MEDIA TAGS READER
         const tagsPromise = readMediaTagsAsync(file);
         promiseArray = [...promiseArray, tagsPromise];
         tagsPromise.then(result => {
-          //console.log(result);
           const tags = result.tags;
           file.artist = tags.artist;
           file.album = tags.album;
@@ -43,15 +51,18 @@ export const useReadFileAsync = () => {
           file.title = tags.title;
           file.trackNo = tags.track;
           file.year = tags.year;
-          updateTracks();
         });
       });
 
       Promise.all(promiseArray).then(() => {
-        setReady(true);
+        updateTracks();
       });
     }
   }, [files]);
+
+  function addFiles(newFiles) {
+    setFiles(newFiles);
+  }
 
   function updateTracks() {
     const all = [...state.tracks, ...files];
@@ -95,14 +106,19 @@ export const useReadFileAsync = () => {
     });
   }
 
-  function getAudioDuration(audioFile) {
+  function getAudioDuration(file) {
     return new Promise((resolve, reject) => {
       try {
-        const sound = new Howl({ src: [audioFile] });
-        sound.on("load", () => {
-          resolve(sound.duration());
+        let track = new Howl({ src: [file] });
+        // console.log(track._state);
+        if (track.state() === "loaded") {
+          resolve(track.duration());
+        }
+        track.on("load", () => {
+          const dur = track.duration();
+          resolve(dur);
         });
-        sound.on("loaderror", () => {
+        track.on("loaderror", () => {
           reject("getAudioDuration error");
         });
       } catch (e) {
@@ -112,8 +128,8 @@ export const useReadFileAsync = () => {
   }
 
   return {
+    addFiles,
     files,
-    readFilesAsync,
     //error,
     ready
     //loading

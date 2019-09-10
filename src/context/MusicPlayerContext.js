@@ -15,17 +15,17 @@ const DEFAULT_STATE = {
 const MusicPlayerProvider = props => {
   const [state, setState] = useState(DEFAULT_STATE);
 
-  useEffect(() => {
-    setState(state => ({
-      ...state,
-      audioPlayer: new Howl({ src: [ExampleTrack.sound] }),
-      tracks: [ExampleTrack],
-      currentTrackIndex: 0
-    }));
-  }, []);
+  // useEffect(() => {
+  //   setState(state => ({
+  //     ...state,
+  //     audioPlayer: new Howl({ src: [ExampleTrack.sound] }),
+  //     tracks: [ExampleTrack],
+  //     currentTrackIndex: 0
+  //   }));
+  // }, []);
 
   function resetToDefault() {
-    // console.log('context says: reset ...')
+    console.log("context says: reset ...");
     setState(DEFAULT_STATE);
   }
 
