@@ -14,10 +14,6 @@ export const Playlist = () => {
   const { addFiles } = useReadFileAsync();
   const fileInput = useRef();
 
-  useEffect(() => {
-    console.log("playlist = " + currentTrackIndex);
-  });
-
   const onTrackSelected = index => {
     selectTrack(index);
   };

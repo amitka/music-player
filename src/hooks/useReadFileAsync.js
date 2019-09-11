@@ -10,15 +10,6 @@ export const useReadFileAsync = () => {
   //const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    if (state.tracks.length === 0) {
-      setFiles(null);
-      setReady(false);
-    } else {
-      setReady(true);
-    }
-  }, [state.tracks]);
-
-  useEffect(() => {
     if (files !== null) {
       let promiseArray = [];
 
@@ -32,30 +23,33 @@ export const useReadFileAsync = () => {
             return file.sound;
           })
           .then(result => {
+            // AUDIO FILE DURATION
             const durationPromise = getAudioDuration(result);
             promiseArray = [...promiseArray, durationPromise];
-            durationPromise.then(result => {
-              file.duration = result;
-            });
+            durationPromise
+              .then(result => {
+                file.duration = result;
+              });
           })
-          .catch(error => console.log("useReadFileAsync error..." + error));
 
         // MEDIA TAGS READER
         const tagsPromise = readMediaTagsAsync(file);
         promiseArray = [...promiseArray, tagsPromise];
-        tagsPromise.then(result => {
-          const tags = result.tags;
-          file.artist = tags.artist;
-          file.album = tags.album;
-          file.pic = tags.picture;
-          file.title = tags.title;
-          file.trackNo = tags.track;
-          file.year = tags.year;
-        });
+        tagsPromise
+          .then(result => {
+            const tags = result.tags;
+            file.artist = tags.artist;
+            file.album = tags.album;
+            file.pic = tags.picture;
+            file.title = tags.title;
+            file.trackNo = tags.track;
+            file.year = tags.year;
+          });
       });
 
       Promise.all(promiseArray).then(() => {
         updateTracks();
+        setFiles(null);
       });
     }
   }, [files]);
