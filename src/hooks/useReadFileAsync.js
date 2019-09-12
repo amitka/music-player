@@ -20,16 +20,7 @@ export const useReadFileAsync = () => {
         filePromise
           .then(result => {
             file.sound = result;
-            return file.sound;
-          })
-          .then(result => {
-            // AUDIO FILE DURATION
-            const durationPromise = getAudioDuration(result);
-            promiseArray = [...promiseArray, durationPromise];
-            durationPromise
-              .then(result => {
-                file.duration = result;
-              });
+            //console.log('file resolved');
           })
 
         // MEDIA TAGS READER
@@ -37,6 +28,7 @@ export const useReadFileAsync = () => {
         promiseArray = [...promiseArray, tagsPromise];
         tagsPromise
           .then(result => {
+            //console.log('tags resolved');
             const tags = result.tags;
             file.artist = tags.artist;
             file.album = tags.album;
@@ -47,10 +39,19 @@ export const useReadFileAsync = () => {
           });
       });
 
-      Promise.all(promiseArray).then(() => {
-        updateTracks();
-        setFiles(null);
-      });
+      Promise.all(promiseArray)
+        .then(() => {
+          console.log('ALL resolved');
+          //updateTracks();
+          //setFiles(null);
+          const durationPromise = files.map(file => getAudioDuration(file));
+          return Promise.all(durationPromise);
+        })
+        .then(() => {
+          console.log('done')
+          console.log(files);
+        })
+        .catch(error => console.log(`Error in promises ${error}`));
     }
   }, [files]);
 
@@ -103,14 +104,15 @@ export const useReadFileAsync = () => {
   function getAudioDuration(file) {
     return new Promise((resolve, reject) => {
       try {
-        let track = new Howl({ src: [file] });
+        let track = new Howl({ src: [file.sound] });
         // console.log(track._state);
         if (track.state() === "loaded") {
           resolve(track.duration());
         }
         track.on("load", () => {
-          const dur = track.duration();
-          resolve(dur);
+          //const dur = track.duration();
+          file.duration = track.duration()
+          resolve(file);
         });
         track.on("loaderror", () => {
           reject("getAudioDuration error");

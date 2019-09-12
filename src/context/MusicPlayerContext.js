@@ -5,6 +5,7 @@ import { ExampleTrack } from "../components/ExampleTrack";
 const MusicPlayerContext = React.createContext([{}, () => {}, () => {}]);
 
 const DEFAULT_STATE = {
+  loading: false,
   audioPlayer: new Howl({ src: [null] }),
   tracks: [],
   currentTrackIndex: -1,
@@ -23,6 +24,17 @@ const MusicPlayerProvider = props => {
   //     currentTrackIndex: 0
   //   }));
   // }, []);
+
+  useEffect(()=>{
+    if (state.tracks.length > 0) {
+      setState(state => ({
+        ...state,
+        audioPlayer: new Howl({ src: [state.tracks[0].sound] }),
+        currentTrackIndex: 0
+      }));
+      console.log("context says: Ready to play !");
+    }
+  }, [state.tracks]);
 
   function resetToDefault() {
     console.log("context says: reset ...");
