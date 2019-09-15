@@ -7,7 +7,6 @@ export const Playlist = () => {
   const {
     clearAllTracks,
     selectTrack,
-    addTracks,
     tracksList,
     currentTrackIndex
   } = useMusicPlayer();
@@ -25,6 +24,27 @@ export const Playlist = () => {
     fileInput.current.value = "";
   };
 
+  const renderTrackItems = () => {
+    return tracksList.map((track, index) => (
+      <li
+        key={index}
+        className={classNames(
+            "track-item", 
+            { selected: index === currentTrackIndex },
+            { isReady: track.sound && track.duration }
+          )}
+        onClick={() => onTrackSelected(index)}
+      >
+        <div className="track-data-container">
+          <span className="track-index">{index + 1}</span>
+          <span className="track-title">{track.title || track.name}</span>
+          <span className="track-artist">{track.artist}</span>
+          <span className="track-album">{track.album}</span>
+        </div>
+      </li>
+    ))
+  }
+
   return (
     <div className="playlist-container">
       <div className="toolbar-container">
@@ -39,22 +59,10 @@ export const Playlist = () => {
         <span>{`${tracksList.length} tracks`}</span>
       </div>
       <div className="tracks-container">
-        <ul>
-          {tracksList.map((track, index) => (
-            <li
-              key={index}
-              style={track.sound ? { opacity: "1" } : { opacity: ".5" }}
-              className={classNames("track-item", {
-                selected: index === currentTrackIndex
-              })}
-              onClick={() => onTrackSelected(index)}
-            >
-              <span>{index + 1}</span>
-              <span>{track.title || track.name}</span>
-              <span>{track.artist}</span>
-              <span>{track.album}</span>
-            </li>
-          ))}
+        <ul className="tracks-list">
+          {
+            renderTrackItems()
+          }
         </ul>
       </div>
     </div>

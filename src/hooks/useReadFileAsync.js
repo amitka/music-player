@@ -5,9 +5,6 @@ import { Howl, Howler } from "howler";
 export const useReadFileAsync = () => {
   const [state, setState] = useContext(MusicPlayerContext);
   const [files, setFiles] = useState(null);
-  //const [error, setError] = useState(null);
-  const [ready, setReady] = useState(false);
-  //const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (files !== null) {
@@ -42,14 +39,14 @@ export const useReadFileAsync = () => {
       Promise.all(promiseArray)
         .then(() => {
           console.log('ALL resolved');
-          //updateTracks();
-          //setFiles(null);
           const durationPromise = files.map(file => getAudioDuration(file));
           return Promise.all(durationPromise);
         })
         .then(() => {
           console.log('done')
           console.log(files);
+          updateTracks();
+          //setFiles(null);
         })
         .catch(error => console.log(`Error in promises ${error}`));
     }
@@ -105,15 +102,17 @@ export const useReadFileAsync = () => {
     return new Promise((resolve, reject) => {
       try {
         let track = new Howl({ src: [file.sound] });
-        // console.log(track._state);
+        
         if (track.state() === "loaded") {
-          resolve(track.duration());
+          file.duration = track.duration()
+          resolve(file);
         }
+
         track.on("load", () => {
-          //const dur = track.duration();
           file.duration = track.duration()
           resolve(file);
         });
+
         track.on("loaderror", () => {
           reject("getAudioDuration error");
         });
@@ -126,8 +125,5 @@ export const useReadFileAsync = () => {
   return {
     addFiles,
     files,
-    //error,
-    ready
-    //loading
   };
 };

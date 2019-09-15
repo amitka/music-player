@@ -5,10 +5,10 @@ import { ExampleTrack } from "../components/ExampleTrack";
 const MusicPlayerContext = React.createContext([{}, () => {}, () => {}]);
 
 const DEFAULT_STATE = {
-  loading: false,
   audioPlayer: new Howl({ src: [null] }),
   tracks: [],
   currentTrackIndex: -1,
+  isLoading: false,
   isPlaying: false,
   uiTheme: "dark-theme"
 };
