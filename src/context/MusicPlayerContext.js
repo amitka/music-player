@@ -25,8 +25,8 @@ const MusicPlayerProvider = props => {
   //   }));
   // }, []);
 
-  useEffect(()=>{
-    if (state.tracks.length > 0) {
+  useEffect(() => {
+    if (state.isLoading === false && state.tracks.length > 0) {
       setState(state => ({
         ...state,
         audioPlayer: new Howl({ src: [state.tracks[0].sound] }),
@@ -34,7 +34,7 @@ const MusicPlayerProvider = props => {
       }));
       console.log("context says: Ready to play !");
     }
-  }, [state.tracks]);
+  }, [state.isLoading]);
 
   function resetToDefault() {
     console.log("context says: reset ...");

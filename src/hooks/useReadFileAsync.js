@@ -8,45 +8,36 @@ export const useReadFileAsync = () => {
 
   useEffect(() => {
     if (files !== null) {
+      updateTracks(files, true);
       let promiseArray = [];
 
       files.forEach(file => {
         // FILE READER
         const filePromise = readFileAsync(file);
         promiseArray = [...promiseArray, filePromise];
-        filePromise
-          .then(result => {
-            file.sound = result;
-            //console.log('file resolved');
-          })
+        filePromise.then(result => {
+          file.sound = result;
+          updateTracks(files, true);
+        });
 
         // MEDIA TAGS READER
         const tagsPromise = readMediaTagsAsync(file);
         promiseArray = [...promiseArray, tagsPromise];
-        tagsPromise
-          .then(result => {
-            //console.log('tags resolved');
-            const tags = result.tags;
-            file.artist = tags.artist;
-            file.album = tags.album;
-            file.pic = tags.picture;
-            file.title = tags.title;
-            file.trackNo = tags.track;
-            file.year = tags.year;
-          });
+        tagsPromise.then(result => {
+          file.tags = result.tags;
+          updateTracks(files, true);
+        });
       });
 
       Promise.all(promiseArray)
         .then(() => {
-          console.log('ALL resolved');
           const durationPromise = files.map(file => getAudioDuration(file));
           return Promise.all(durationPromise);
         })
         .then(() => {
-          console.log('done')
-          console.log(files);
-          updateTracks();
-          //setFiles(null);
+          console.log("all resolved ...");
+          updateTracks(files);
+          setFiles(null);
         })
         .catch(error => console.log(`Error in promises ${error}`));
     }
@@ -56,9 +47,9 @@ export const useReadFileAsync = () => {
     setFiles(newFiles);
   }
 
-  function updateTracks() {
+  function updateTracks(files, isLoading = false) {
     const all = [...state.tracks, ...files];
-    setState(state => ({ ...state, tracks: all }));
+    setState(state => ({ ...state, tracks: all, isLoading: isLoading }));
   }
 
   function readFileAsync(file) {
@@ -102,14 +93,14 @@ export const useReadFileAsync = () => {
     return new Promise((resolve, reject) => {
       try {
         let track = new Howl({ src: [file.sound] });
-        
+
         if (track.state() === "loaded") {
-          file.duration = track.duration()
+          file.duration = track.duration();
           resolve(file);
         }
 
         track.on("load", () => {
-          file.duration = track.duration()
+          file.duration = track.duration();
           resolve(file);
         });
 
@@ -124,6 +115,6 @@ export const useReadFileAsync = () => {
 
   return {
     addFiles,
-    files,
+    files
   };
 };
