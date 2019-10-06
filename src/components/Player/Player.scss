@@ -10,6 +10,8 @@
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
+  //
+  z-index: 99999998;
 
   .btn-wrapper {
     display: flex;
