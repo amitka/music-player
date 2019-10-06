@@ -1,35 +1,22 @@
 import { useContext, useEffect } from "react";
 import { MusicPlayerContext } from "../context/MusicPlayerContext";
-import { useReadFileAsync } from "./useReadFileAsync";
 import { Howl } from "howler";
 
 export const useMusicPlayer = () => {
   const [state, setState, resetToDefault] = useContext(MusicPlayerContext);
-  const { ready } = useReadFileAsync();
 
-  useEffect(() => {
-    // LOAD FIRST TRACK WHEN ...
-    // ... ALL TRACKS ARE READY !
-    // if (ready) {
-    //   setState(state => ({
-    //     ...state,
-    //     audioPlayer: new Howl({ src: [state.tracks[0].sound] }),
-    //     currentTrackIndex: 0
-    //   }));
-    //   console.log("Ready to play !");
-    // }
-  }, [ready]);
-
-  useEffect(() => {
-    if (state.tracks.length > 0) {
-      setState(state => ({
-        ...state,
-        audioPlayer: new Howl({ src: [state.tracks[0].sound] }),
-        currentTrackIndex: 0
-      }));
-      console.log("Ready to play !");
-    }
-  }, [state.tracks]);
+  // LOAD FIRST TRACK WHEN ...
+  // ... ALL TRACKS ARE READY !
+  // useEffect(()=>{
+  //   if (state.tracks.length > 0) {
+  //     setState(state => ({
+  //       ...state,
+  //       audioPlayer: new Howl({ src: [state.tracks[0].sound] }),
+  //       currentTrackIndex: 0
+  //     }));
+  //     console.log("Ready to play !");
+  //   }
+  // }, [state.tracks]);
 
   useEffect(() => {
     if (state.isPlaying) {

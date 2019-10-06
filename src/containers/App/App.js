@@ -1,6 +1,6 @@
 import React from "react";
-import { MusicPlayerProvider } from "./context/MusicPlayerContext";
-import { MusicPlayer } from "./containers/MusicPlayer";
+import { MusicPlayerProvider } from "../../context/MusicPlayerContext";
+import { MusicPlayer } from "../MusicPlayer";
 
 //import './App.css';
 
